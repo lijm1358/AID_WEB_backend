@@ -2,7 +2,7 @@ name: CI/CD
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ "dev" ]
 
 jobs:
   build_and_deploy:
@@ -43,7 +43,7 @@ jobs:
         username: ${{ secrets.AWS_USERNAME }}
         key: ${{ secrets.AWS_KEY }}
         overwrite: true
-        source: "./config/deploy.sh,./config/nginx.prod.conf,./config/.db.env,./config/.server.env,docker-compose.prod.yaml"
+        source: "./config/deploy_test.sh,./config/nginx.test.conf,./config/.db.env,./config/.server.env,docker-compose.yaml"
         target: "/home/ubuntu"
         timeout: 3m
 
@@ -62,7 +62,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
-        file: Dockerfile.prod
+        file: Dockerfile
         push: true
         tags: bshlab671/aid_web:latest
 
@@ -77,4 +77,4 @@ jobs:
         timeout: 3m
 
         script: |
-          sh ./config/deploy.sh
+          sh ./config/deploy_test.sh
